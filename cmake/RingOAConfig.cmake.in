@@ -1,0 +1,21 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+if(DEFINED THIRD_PARTY_DIR)
+  find_dependency(cryptoTools CONFIG REQUIRED HINTS "${THIRD_PARTY_DIR}/unix")
+else()
+  find_dependency(cryptoTools CONFIG REQUIRED)
+endif()
+
+# Import exported targets (guard against multiple inclusion)
+if(NOT TARGET RingOA::RingOA)
+  include("${CMAKE_CURRENT_LIST_DIR}/RingOATargets.cmake")
+endif()
+
+# >>> Expose RingOA's effective settings to consumers <<<
+set(RingOA_LOG_LEVEL "@LOG_LEVEL_EFFECTIVE@")
+set(RingOA_USE_FIXED_RANDOM_SEED "@USE_FIXED_RANDOM_SEED_EFFECTIVE@")
+
+# Convenience variable (optional)
+set(RingOA_VERSION "@PROJECT_VERSION@")

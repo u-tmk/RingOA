@@ -1,0 +1,10 @@
+# Build files
+data/
+out/
+.vscode/
+
+# Third party libraries
+thirdparty/*
+
+# Exclude the getCryptoTools.py script
+!thirdparty/getCryptoTools.py
