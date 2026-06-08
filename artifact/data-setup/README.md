@@ -1,6 +1,6 @@
 # Real Dataset Preparation
 
-The experiments in the paper use real genomic datasets for the full text search and range search benchmarks. This directory contains scripts and instructions for preparing those datasets.
+The experiments in the paper use real genomic datasets for the full-text search and range search benchmarks. This directory contains scripts and instructions for preparing those datasets.
 
 The dataset preparation workflow is organized into two subdirectories:
 

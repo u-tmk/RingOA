@@ -21,11 +21,13 @@ No security, privacy, or ethical concerns. This artifact does not include any vu
 
 ### Hardware Requirements
 
-The artifact can run on a standard desktop or laptop computer. No special hardware is required.
+The artifact can run on a standard desktop or laptop computer. No special hardware is required. The artifact has been tested on x86_64 systems.
 For the default benchmark configuration, we recommend:
 
-- 16 GB RAM
+- 32 GB RAM (Experiment 1)
 - 60 GB of available disk space
+
+Experiment 1 (oblivious access) can also be executed on a machine with 16 GB RAM using the default benchmark settings. Additional memory may be required for larger benchmark configurations and dataset generation.
 
 The experiments reported in the paper were conducted on a Linux machine equipped with an AMD Ryzen Threadripper 3970X CPU (3.7 GHz) and 256 GB RAM.
 
@@ -90,13 +92,15 @@ Run unit tests to verify correctness:
 
 ### Evaluation Overview
 
-This artifact provides three benchmark experiments for evaluating functionality and reproducing the main results of the paper: oblivious access, full text search, and range search. Unless otherwise specified, the benchmark scripts use the `medium` setting by default. For oblivious access and full text search, the `medium` setting evaluates database sizes `N = 2^20, 2^22, 2^24, 2^26`.
+This artifact provides three benchmark experiments for evaluating functionality and reproducing the main results of the paper: oblivious access, full-text search, and range search. Unless otherwise specified, the benchmark scripts use the `medium` setting by default. For oblivious access and full-text search, the `medium` setting evaluates database sizes `N = 2^20, 2^22, 2^24, 2^26`.
+
+The benchmark scripts support reproducing the network environments used in the paper. The experiments are executed under the same latency and bandwidth settings as those used to generate the reported results.
 
 Each benchmark prints the aggregated results to standard output at the end of execution. The results are also stored under `./data/results/<run_id>/`, where `<run_id>` identifies the timestamped result directory generated for the current benchmark run.
 
 #### Dataset Note
 
-The full text search and range search experiments in the paper use real datasets. To simplify artifact evaluation, the default workflow uses randomly generated datasets and does not require downloading or preprocessing external data. Using random datasets does not affect the reported performance measurements. To use the same real datasets as in the paper, follow the instructions in [artifact/data-setup/README.md](data-setup/README.md) and generate datasets with the `real` option.
+The full-text search and range search experiments in the paper use real datasets. To simplify artifact evaluation, the default workflow uses randomly generated datasets and does not require downloading or preprocessing external data. Using random datasets does not affect the reported performance measurements. To use the same real datasets as in the paper, follow the instructions in [artifact/data-setup/README.md](data-setup/README.md) and generate datasets with the `real` option.
 
 ### Main Results and Claims
 
@@ -123,7 +127,7 @@ This experiment reproduces [Main Result 1: Oblivious Access Performance](#main-r
 Before running the benchmark, build the included DuORAM baseline implementation:
 
 ```bash
-cd artifact/baselines/prac
+cd artifact/baseline/prac
 make -j$(nproc)
 cd ../../..
 ```

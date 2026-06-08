@@ -13,8 +13,17 @@ The PRAC project is distributed under the MIT License. The original license and 
 
 ## Building PRAC
 
+PRAC requires the following packages:
+
 ```bash
-cd baselines/prac
+sudo apt update
+sudo apt install -y libbsd-dev libboost-all-dev
+```
+
+Build the executable with:
+
+```bash
+cd baseline/prac
 make -j$(nproc)
 ```
 This will produce the `out/prac` executable, which can be used to run the DuORAM protocol and obtain performance measurements.
