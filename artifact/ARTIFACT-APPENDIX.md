@@ -21,7 +21,7 @@ No security, privacy, or ethical concerns. This artifact does not include any vu
 
 ### Hardware Requirements
 
-The artifact can run on a standard desktop or laptop computer. No special hardware is required. The artifact has been tested on x86_64 systems.
+The artifact can run on a standard desktop or laptop computer. No special hardware is required beyond an x86_64 processor with SSE2 and AES-NI support.
 For the default benchmark configuration, we recommend:
 
 - 32 GB RAM (Experiment 1)
