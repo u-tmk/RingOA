@@ -24,7 +24,7 @@ No security, privacy, or ethical concerns. This artifact does not include any vu
 The artifact can run on a standard desktop or laptop computer. No special hardware is required beyond an x86_64 processor with SSE2 and AES-NI support.
 For the default benchmark configuration, we recommend:
 
-- 32 GB RAM (Experiment 1)
+- 32 GB RAM
 - 60 GB of available disk space
 
 Experiment 1 (oblivious access) can also be executed on a machine with 16 GB RAM using the default benchmark settings. Additional memory may be required for larger benchmark configurations and dataset generation.
@@ -63,9 +63,23 @@ The artifact is publicly available at: https://github.com/u-tmk/RingOA
 
 ### Set up the environment
 
-Before building, install [SDSL](https://github.com/simongog/sdsl-lite), which is required for running the application. Make sure it is installed and visible to CMake (e.g., via system installation or by setting `CMAKE_PREFIX_PATH`).
+Install the required system packages:
 
-After installing the required dependency, clone the repository and build the project:
+```bash
+sudo apt update
+sudo apt install -y build-essential cmake libboost-all-dev libbsd-dev
+```
+
+Install [SDSL](https://github.com/simongog/sdsl-lite), which is required for running the application:
+
+```bash
+git clone https://github.com/simongog/sdsl-lite.git
+cd sdsl-lite
+sudo ./install.sh /usr/local/
+cd ..
+```
+
+After installing SDSL, clone the repository and build the project:
 
 ```bash
 git clone https://github.com/u-tmk/RingOA
