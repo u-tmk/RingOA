@@ -18,9 +18,10 @@ def getCryptoTools(par: int, build_cryptoTools: bool, setup_boost: bool, setup_r
                    debug: bool = False, use_sudo: bool = False):
     cwd = Path(__file__).resolve().parent
     repo_dir = cwd / "cryptoTools"
-    staged_prefix = cwd / "unix"   # ← 固定: thirdparty/unix
+    staged_prefix = cwd / "unix"   # <- Fixed: thirdparty/unix
 
-    commit = "2bf5fe84e19cadd9aeea5c191a08ac59e65b54e7"
+    # commit = "2bf5fe84e19cadd9aeea5c191a08ac59e65b54e7"
+    commit = "6290764f3f036a485f0e8bc1fe545481dbd604b1"
 
     # clone & pin
     if not repo_dir.is_dir():

@@ -274,10 +274,10 @@ void DpfKeyGenerator::ComputeAdditiveShiftedOutput(uint64_t alpha, uint64_t beta
     uint8_t shift_amount = (kSecurityParameter / (1U << remaining_bit)) * alpha_hat;
     if (shift_amount >= 64) {
         beta_block = beta_block.mm_slli_si128<8>();    // Shift left by 8 bytes (64 bits)
-        beta_block = beta_block << (shift_amount - 64);
+        beta_block = beta_block.slli_epi64(shift_amount - 64);
     } else {
         // The shift of the upper bits is not necessary because the beta is 32 bits or less.
-        beta_block = beta_block << shift_amount;
+        beta_block = beta_block.slli_epi64(shift_amount);
     }
 
 #if LOG_LEVEL >= LOG_LEVEL_TRACE
