@@ -1,0 +1,7 @@
+#!/bin/bash
+
+set -e
+
+docker run --rm \
+  ringoa-artifact \
+  ./out/build/linux/bin/test_RingOA -u

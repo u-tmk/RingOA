@@ -33,9 +33,16 @@ The experiments reported in the paper were conducted on a Linux machine equipped
 
 ### Software Requirements
 
+#### Native Setup
+
 - OS: Linux (tested on Ubuntu 20.04 and 22.04)
 - OS Packages: Git, Make, CMake (version 3.18 or later), Python (version 3.6 or later)
 - Compiler: GCC / G++ (version 11 or later, with C++20 support)
+
+#### Docker Setup
+
+- Container Runtime: Docker 28.1.1 (tested)
+- Base Image: Ubuntu 22.04
 
 Dependencies:
 
@@ -61,7 +68,7 @@ Most of the storage is used by files storing secret-shared benchmark databases.
 
 The artifact is publicly available at: https://github.com/u-tmk/RingOA
 
-### Set up the environment
+### Native Setup
 
 Install the required system packages:
 
@@ -92,7 +99,24 @@ python build.py --setup
 python build.py
 ```
 
-The `--setup` option is required only for the first build to set up dependencies. Build outputs are generated under `out/build/linux/`.
+The `--setup` option is required only for the first build. Build outputs are generated under `out/build/linux/`.
+
+### Docker Setup
+
+Build the Docker image:
+
+```bash
+./docker/build-docker
+```
+
+Start an interactive shell inside the container:
+
+```bash
+./docker/start-docker
+```
+
+The host directory `./data` is mounted to `/RingOA/data` inside the container.
+
 
 ### Testing the Environment
 
@@ -100,6 +124,12 @@ Run unit tests to verify correctness:
 
 ```bash
 ./out/build/linux/bin/test_RingOA -u
+```
+
+When using Docker, run:
+
+```bash
+./docker/run-unit-test
 ```
 
 ## Artifact Evaluation
@@ -110,7 +140,7 @@ This artifact provides three benchmark experiments for evaluating functionality 
 
 The benchmark scripts support reproducing the network environments used in the paper. The experiments are executed under the same latency and bandwidth settings as those used to generate the reported results.
 
-Each benchmark prints the aggregated results to standard output at the end of execution. The results are also stored under `./data/results/<run_id>/`, where `<run_id>` identifies the timestamped result directory generated for the current benchmark run.
+Each benchmark prints the aggregated results to standard output at the end of execution. The results are also stored under `./data/results/<run_id>/`, where `<run_id>` identifies the timestamped result directory generated for the current benchmark run. The experiments can be executed either natively or through Docker. See [Running Benchmarks with Docker](#running-benchmarks-with-docker).
 
 #### Dataset Note
 
@@ -229,6 +259,22 @@ Run the benchmark:
 ```
 
 The aggregated results are printed to standard output at the end of the benchmark execution. The parsed results are also stored in `./data/results/<run_id>/parsed/range_table.tsv`, where `<run_id>` identifies the current benchmark run.
+
+### Running Benchmarks with Docker
+
+The same experiments can also be executed inside the Docker container.
+
+```bash
+./docker/run-oa-bench
+./docker/run-fts-bench
+./docker/run-range-bench
+```
+
+These wrapper scripts generate the required datasets and then run the corresponding benchmark. Results are stored under `./data/results/<run_id>/` on the host machine. The scripts accept the same environment variables as the native benchmark scripts. For example:
+
+```bash
+DB_BITS=28,30 ./docker/run-oa-bench
+```
 
 ## Limitations
 

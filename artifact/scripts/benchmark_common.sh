@@ -6,6 +6,7 @@
 
 SUDO_KEEPALIVE_PID=""
 NETWORK_CONFIGURED=0
+SUDO_CMD=()
 
 check_executable() {
   local path="$1"
@@ -46,7 +47,43 @@ wait_for_processes() {
   return "${rc}"
 }
 
+configure_privilege_command() {
+  local use_sudo="${RINGOA_USE_SUDO:-auto}"
+
+  SUDO_CMD=()
+
+  if [[ "${use_sudo}" == "0" || "${use_sudo}" == "false" || "${use_sudo}" == "no" ]]; then
+    return 0
+  fi
+
+  if [[ "${use_sudo}" == "1" || "${use_sudo}" == "true" || "${use_sudo}" == "yes" ]]; then
+    SUDO_CMD=(sudo -n)
+    return 0
+  fi
+
+  # auto mode:
+  # If the script is already running as root, sudo is unnecessary.
+  # Otherwise, use sudo.
+  if [[ "${EUID}" -eq 0 ]]; then
+    SUDO_CMD=()
+  else
+    SUDO_CMD=(sudo -n)
+  fi
+}
+
+run_privileged() {
+  if [[ "${#SUDO_CMD[@]}" -eq 0 ]]; then
+    "$@"
+  else
+    "${SUDO_CMD[@]}" "$@"
+  fi
+}
+
 start_sudo_keepalive() {
+  if [[ "${#SUDO_CMD[@]}" -eq 0 ]]; then
+    return 0
+  fi
+
   echo "Acquiring sudo credentials..."
   sudo -v
 
@@ -79,7 +116,7 @@ cleanup_benchmark() {
   if [[ "${NETWORK_CONFIGURED}" -eq 1 ]]; then
     echo
     echo "Resetting network configuration..."
-    if ! sudo -n "${RESET_NETWORK}"; then
+    if ! run_privileged "${RESET_NETWORK}"; then
       echo "Warning: Failed to reset the network configuration." >&2
     fi
   fi
@@ -99,7 +136,9 @@ initialize_benchmark_environment() {
 
   mkdir -p "${LOG_DIR}" "${STDOUT_DIR}" "${PARSED_DIR}"
 
+  configure_privilege_command
   start_sudo_keepalive
+
   trap cleanup_benchmark EXIT
   trap 'exit 130' INT
   trap 'exit 143' TERM
@@ -126,9 +165,9 @@ set_benchmark_network() {
   validate_network "${network}"
 
   if [[ "${network}" == "IDEAL" ]]; then
-    sudo -n "${RESET_NETWORK}"
+    run_privileged "${RESET_NETWORK}"
   else
-    sudo -n "${SET_NETWORK}" "${network}"
+    run_privileged "${SET_NETWORK}" "${network}"
   fi
 
   NETWORK_CONFIGURED=1

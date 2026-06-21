@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+mkdir -p "$REPO_DIR/data"
+
+docker run --rm \
+  --cap-add NET_ADMIN \
+  -e DB_BITS \
+  -e NETWORKS \
+  -v "$REPO_DIR/data:/RingOA/data" \
+  ringoa-artifact \
+  bash -lc '
+    cd /RingOA
+    ./artifact/scripts/gen_dataset.sh fts
+    RINGOA_USE_SUDO=0 ./artifact/scripts/run_fts_bench.sh
+  '

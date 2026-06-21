@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+REPO_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+mkdir -p "$REPO_DIR/data"
+
+docker run --rm -it \
+  --cap-add NET_ADMIN \
+  -v "$REPO_DIR/data:/RingOA/data" \
+  ringoa-artifact \
+  bash

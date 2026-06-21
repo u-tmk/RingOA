@@ -1,0 +1,11 @@
+# Build files
+.vscode/
+data/
+out/
+artifact/baseline/prac/out
+
+# Third party libraries
+thirdparty/*
+
+# Exclude the getCryptoTools.py script
+!thirdparty/getCryptoTools.py
